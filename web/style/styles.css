@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:46ec99b1600947f6ca679a6e6487f8f413a8d02370c2ad7caed0c4852f06d10e
-size 297
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+    max-width: 100vw;
+    overflow: hidden auto;
+    min-height: 100%;
+}
+
+.page {
+    /* min-height: calc(100vh - 60px); */
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    max-width: 100%;
+    overflow: hidden auto;
+}

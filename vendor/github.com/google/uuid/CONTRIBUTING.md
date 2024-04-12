@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c1e068afdc267d5cd61688fdcd16ba53b9ee2cde273053ab2991e95cbf419497
-size 956
+# How to contribute
+
+We definitely welcome patches and contribution to this project!
+
+### Tips
+
+Commits must be formatted according to the [Conventional Commits Specification](https://www.conventionalcommits.org).
+
+Always try to include a test case! If it is not possible or not necessary,
+please explain why in the pull request description.
+
+### Releasing
+
+Commits that would precipitate a SemVer change, as described in the Conventional
+Commits Specification, will trigger [`release-please`](https://github.com/google-github-actions/release-please-action)
+to create a release candidate pull request. Once submitted, `release-please`
+will create a release.
+
+For tips on how to work with `release-please`, see its documentation.
+
+### Legal requirements
+
+In order to protect both you and ourselves, you will need to sign the
+[Contributor License Agreement](https://cla.developers.google.com/clas).
+
+You may have already signed it for other Google projects.

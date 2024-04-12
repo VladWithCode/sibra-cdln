@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:01eca81d63a93543962fac4b8cf0e1e1d83c7575f2af7931494cf431e0034b69
-size 190
+# pgio
+
+Package pgio is a low-level toolkit building messages in the PostgreSQL wire protocol.
+
+pgio provides functions for appending integers to a []byte while doing byte
+order conversion.

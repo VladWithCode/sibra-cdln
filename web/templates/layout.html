@@ -1,3 +1,107 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:851142584402d44289b6d49401552178969e6ab6faedc937da0e20eba079bc48
-size 5038
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {{with .HeadTitle}}
+        {{.}}
+        {{else}}
+        OTM Clone
+        {{end}}
+    </title>
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/js/htmx.js"></script>
+    <script src="/static/js/gsap.js"></script>
+    {{block "head" .}}
+    {{end}}
+</head>
+<body>
+    {{block "header" .}}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let wrapper = document.querySelector("[data-nav-wrapper]")
+            let toggler = document.querySelector("[data-nav-toggler]")
+            let logoContainer = document.querySelector("[data-logo-container]")
+            let logoWhite = document.querySelector("[data-logo-white]")
+            let logoColor = document.querySelector("[data-logo-color]")
+            let navMenu = document.querySelector("[data-nav-menu]")
+            let menuHeight = navMenu.scrollHeight
+
+            gsap.to(logoWhite, { y: "0%", duration: 0.7 })
+
+            toggler.addEventListener("click", e => {
+                let navOpen = wrapper.dataset.wrapper === "open"
+                let tl = gsap.timeline({ ease: "power2.in", duration: 0.3 })
+
+                if (navOpen) {
+                    tl.to(wrapper, { background: "transparent" })
+                    tl.to(toggler, { color: "#fafaf9" }, "<")
+                    tl.to(navMenu, { height: `0px`, opacity: 0 }, "<")
+                    tl.to(logoColor, { y: "0%", opacity: 0 }, "<")
+                    tl.fromTo(logoWhite, { y: "-100%", opacity: 0 }, { y: "0%", opacity: 1 }, "<")
+                    tl.set(logoColor, { visibility: "hidden" }, "<")
+
+                    wrapper.dataset.wrapper = "closed"
+                    return
+                }
+
+                wrapper.dataset.wrapper = "open"
+                tl.to(wrapper, { background: "#fafaf9" })
+                tl.to(toggler, { color: '#0c0a09' }, "<")
+                tl.to(navMenu, { height: `${menuHeight}px`, opacity: 1 }, "<")
+                tl.set(logoColor, { visibility: "visible" }, "<")
+                tl.to(logoWhite, { opacity: 0 }, "<")
+                tl.fromTo(logoColor, { y: "-200%", opacity: 0 }, { y: "-100%", opacity: 1 }, "<")
+            })
+        })
+    </script>
+    <header class="absolute top-0 left-0 right-0 grid grid-cols-3 grid-row-1 items-center content-center h-20 bg-transparent px-4 z-30" data-nav-wrapper="closed">
+        <div class="row-start-1 col-start-1 flex flex-col w-8 aspect-square justify-evenly items-end text-stone-50" data-nav-toggler="false">
+            <span class="bg-current rounded-full h-1 w-full"></span>
+            <span class="bg-current rounded-full h-1 w-11/12"></span>
+            <span class="bg-current rounded-full h-1 w-4/5"></span>
+        </div>
+        <div class="row-start-1 col-start-2 relative self-center justify-self-center max-h-[55px] overflow-hidden" data-logo-container="">
+            <img src="/static/img/logow_256.webp" alt="Logo Residencial Imperio blanco" class="w-16 h-auto -translate-y-full" data-logo-white="">
+            <img src="/static/img/logo_256.webp" alt="Logo Residencial Imperio colores" class="w-16 h-auto invisible opacity-0" data-logo-color="">
+        </div>
+        <div class="row-start-1 col-start-3 justify-self-end">
+            <button class="px-4 py-2 bg-indigo-900 rounded-sm text-stone-50 text-xs font-medium tracking-wide uppercase">Reservar</button>
+        </div>
+        <div class="nav-menu fixed top-20 left-0 right-0 bg-stone-50 z-0 h-0 opacity-0 overflow-hidden" data-nav-menu="">
+            <ul class="text-stone-950 uppercase">
+                <li class="py-2 px-4 border-stone-400 border-b border-t">
+                    <a href="/" class="">Inicio</a>
+                </li>
+                <li class="py-2 px-4 border-stone-400 border-b">
+                    <a href="/" class="">Avance de Obra</a>
+                </li>
+                <li class="py-2 px-4 border-stone-400 border-b">
+                    <a href="/" class="">Link</a>
+                </li>
+                <li class="py-2 px-4 border-stone-400 border-b">
+                    <a href="/" class="">Link</a>
+                </li>
+                <li class="py-2 px-4">
+                    <a href="/" class="">Link</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    {{end}}
+
+    <main class="page text-stone-900">
+    {{template "content" .}}
+    </main>
+
+    {{block "footer" .}}
+    {{end}}
+</body>
+</html>
+

@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f5d292ca3d0ba2b74959ac41059507dbbb34e07051192de2263734dc5774af74
-size 1150
+//go:build !nopgxregisterdefaulttypes
+
+package pgtype
+
+func registerDefaultPgTypeVariants[T any](m *Map, name string) {
+	arrayName := "_" + name
+
+	var value T
+	m.RegisterDefaultPgType(value, name)  // T
+	m.RegisterDefaultPgType(&value, name) // *T
+
+	var sliceT []T
+	m.RegisterDefaultPgType(sliceT, arrayName)  // []T
+	m.RegisterDefaultPgType(&sliceT, arrayName) // *[]T
+
+	var slicePtrT []*T
+	m.RegisterDefaultPgType(slicePtrT, arrayName)  // []*T
+	m.RegisterDefaultPgType(&slicePtrT, arrayName) // *[]*T
+
+	var arrayOfT Array[T]
+	m.RegisterDefaultPgType(arrayOfT, arrayName)  // Array[T]
+	m.RegisterDefaultPgType(&arrayOfT, arrayName) // *Array[T]
+
+	var arrayOfPtrT Array[*T]
+	m.RegisterDefaultPgType(arrayOfPtrT, arrayName)  // Array[*T]
+	m.RegisterDefaultPgType(&arrayOfPtrT, arrayName) // *Array[*T]
+
+	var flatArrayOfT FlatArray[T]
+	m.RegisterDefaultPgType(flatArrayOfT, arrayName)  // FlatArray[T]
+	m.RegisterDefaultPgType(&flatArrayOfT, arrayName) // *FlatArray[T]
+
+	var flatArrayOfPtrT FlatArray[*T]
+	m.RegisterDefaultPgType(flatArrayOfPtrT, arrayName)  // FlatArray[*T]
+	m.RegisterDefaultPgType(&flatArrayOfPtrT, arrayName) // *FlatArray[*T]
+}

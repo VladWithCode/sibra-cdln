@@ -1,3 +1,46 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9e86fe462c7f8aab58c2f75e9106f64600900fbb903d6fb667bf4e13e8b15e1b
-size 719
+package db
+
+import (
+	"context"
+	"os"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+var db *pgxpool.Pool
+
+func Connect() (*pgxpool.Pool, error) {
+	var err error
+	db, err = pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func GetPool() (*pgxpool.Conn, error) {
+	conn, err := db.Acquire(context.Background())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return conn, nil
+}
+
+func GetTxAndPool(ctx context.Context) (pgx.Tx, *pgxpool.Conn, error) {
+	conn, err := db.Acquire(context.Background())
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	tx, err := conn.Begin(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return tx, conn, nil
+}

@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8180d62911bad1aabc948147c1d4421be910ae253cf81b5b8e9ac54d011f2e97
-size 573
+package puddle
+
+type resList[T any] []*Resource[T]
+
+func (l *resList[T]) append(val *Resource[T]) { *l = append(*l, val) }
+
+func (l *resList[T]) popBack() *Resource[T] {
+	idx := len(*l) - 1
+	val := (*l)[idx]
+	(*l)[idx] = nil // Avoid memory leak
+	*l = (*l)[:idx]
+
+	return val
+}
+
+func (l *resList[T]) remove(val *Resource[T]) {
+	for i, elem := range *l {
+		if elem == val {
+			lastIdx := len(*l) - 1
+			(*l)[i] = (*l)[lastIdx]
+			(*l)[lastIdx] = nil // Avoid memory leak
+			(*l) = (*l)[:lastIdx]
+			return
+		}
+	}
+
+	panic("BUG: removeResource could not find res in slice")
+}

@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:334b6ac9f50339341696319aaf9b912ea8007d0aacf0e909a48a0bb02d982d6d
-size 498
+// Copyright 2017 Google Inc.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// +build js
+
+package uuid
+
+// getHardwareInterface returns nil values for the JS version of the code.
+// This removes the "net" dependency, because it is not used in the browser.
+// Using the "net" library inflates the size of the transpiled JS code by 673k bytes.
+func getHardwareInterface(name string) (string, []byte) { return "", nil }

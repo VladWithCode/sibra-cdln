@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0b286e2af61ede9f58d2455781ea254284c477b7fce2447aab3203992cc51f9f
-size 407
+// Copyright 2016 Google Inc.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package uuid generates and inspects UUIDs.
+//
+// UUIDs are based on RFC 4122 and DCE 1.1: Authentication and Security
+// Services.
+//
+// A UUID is a 16 byte (128 bit) array.  UUIDs may be used as keys to
+// maps or compared directly.
+package uuid

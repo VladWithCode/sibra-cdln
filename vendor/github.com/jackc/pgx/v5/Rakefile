@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4876e590cf59310342afe2a9a84c5dcedc5fdd55152da832558a36c070cf522b
-size 455
+require "erb"
+
+rule '.go' => '.go.erb' do |task|
+  erb = ERB.new(File.read(task.source))
+  File.write(task.name, "// Do not edit. Generated from #{task.source}\n" + erb.result(binding))
+  sh "goimports", "-w", task.name
+end
+
+generated_code_files = [
+  "pgtype/int.go",
+  "pgtype/int_test.go",
+  "pgtype/integration_benchmark_test.go",
+  "pgtype/zeronull/int.go",
+  "pgtype/zeronull/int_test.go"
+]
+
+desc "Generate code"
+task generate: generated_code_files

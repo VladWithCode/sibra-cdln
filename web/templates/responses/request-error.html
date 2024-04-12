@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:334169f204ff78515e70ef800c23ef1a01668c35d59b9e1fbd17ccb0cb9b899b
-size 528
+<div
+    {{with .ElementId}}
+    id="{{.}}" 
+    {{end}}
+    {{with .ElementClass}}
+    class="{{.}}"
+    {{else}}
+    class="relative col-start-1 row-start-1 p-4 pb-2 space-y-4 opacity-0 translate-x-full self-center justify-self-center"
+    {{end}}
+    >
+    <svg class="w-32 h-32 mx-auto fill-red-500">
+        <use href="/static/svg/close.svg#close"></use>
+    </svg>
+    <p class="text-stone-50 text-center">
+    {{with .ErrorMessage}}
+    {{.}}
+    {{else}}
+    Ocurrió un error en el servidor
+    {{end}}
+    </p>
+</div>

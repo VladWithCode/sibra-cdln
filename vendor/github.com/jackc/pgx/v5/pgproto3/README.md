@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5816daba8d5354a5ff227bb2d69974b240fcdbf73b60832cc9249e40efb8a6b7
-size 282
+# pgproto3
+
+Package pgproto3 is an encoder and decoder of the PostgreSQL wire protocol version 3.
+
+pgproto3 can be used as a foundation for PostgreSQL drivers, proxies, mock servers, load balancers and more.
+
+See example/pgfortune for a playful example of a fake PostgreSQL server.

@@ -1,3 +1,360 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:615f593b152ac5cfcf1ab0508fd5689a5cec1bee14f7b5f085782e62adbc4c19
-size 17724
+{{define "head"}}
+<style>
+    .header {
+        /* height: 520px; */;
+    }
+    .top-bg {
+        background: rgb(2,0,36);
+        background: linear-gradient(90deg, rgba(2,0,36,0.35) 0%, rgba(15,14,22,0.35) 100%), url('/static/img/top-bg.webp');
+    }
+    .section.section-img-bg {
+        background: rgb(2,0,36);
+        background: linear-gradient(90deg, rgba(2,0,36,0.65) 0%, rgba(2,0,36,0.65) 100%), url('/static/img/residencial.jpg') no-repeat;
+        background-position: -12rem center;
+    }
+
+    .slider .slider-dot {
+        display: block;
+        width: .675rem;
+        height: .675rem;
+        border-radius: 999px;
+    }
+
+    .slider .slider-dot.active {
+        background-color: rgb(67, 56, 224);
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Hero slider
+        let videoFigure = document.getElementById("hero-video-fig")
+        let videoElem = document.getElementById("hero-video-elem")
+        let videoCaption = document.getElementById("hero-video-caption")
+        let videoPlayBtn = document.getElementById("hero-play-btn")
+        let heroPrevSlideBtn = document.getElementById("hero-slider-btn-prev")
+        let heroNextSlideBtn = document.getElementById("hero-slider-btn-next")
+        let heroSlides = document.querySelectorAll("[data-hero-slider-slide]")
+
+        heroPrevSlideBtn.addEventListener("click", e => {
+            let slideCount = heroSlides.length
+            let activeSlide = document.querySelector(".active[data-hero-slider-slide]")
+            let activeIndex = 0
+
+            if (activeSlide) {
+                activeIndex = parseInt(activeSlide.dataset.heroSliderSlide) - 1
+                if (activeIndex < 0) activeIndex = slideCount - 1
+                activeSlide.classList.remove("active")
+            }
+
+            let nextSlide = document.querySelector(`[data-hero-slider-slide="${activeIndex}"]`)
+            nextSlide.classList.add("active")
+
+            let tl = gsap.timeline({ duration: 0.3, ease: "power2.inOut" })
+            tl.set(activeSlide, { zIndex: 0 })
+            tl.set(nextSlide, { zIndex: 10, visibility: "visible" }, "<")
+            tl.to(nextSlide, { opacity: 1 })
+            tl.set(activeSlide, { opacity: 0, visibility: "hidden" })
+
+            if (videoFigure.dataset.videoFig === "play") {
+                videoElem.pause()
+                videoFigure.currentTime = 0
+                videoFigure.dataset.videoFig = "stop"
+                tl.set(videoCaption, { opacity: 1 })
+            }
+        })
+        heroNextSlideBtn.addEventListener("click", e => {
+            let slideCount = heroSlides.length
+            let activeSlide = document.querySelector(".active[data-hero-slider-slide]")
+            let activeIndex = 0
+
+            if (activeSlide) {
+                activeIndex = parseInt(activeSlide.dataset.heroSliderSlide) + 1
+                if (activeIndex >= slideCount) activeIndex = 0
+                activeSlide.classList.remove("active")
+            }
+
+            let nextSlide = document.querySelector(`[data-hero-slider-slide="${activeIndex}"]`)
+            nextSlide.classList.add("active")
+
+            let tl = gsap.timeline({ duration: 0.3, ease: "power2.inOut" })
+            tl.set(activeSlide, { zIndex: 0 })
+            tl.set(nextSlide, { zIndex: 10, visibility: "visible" }, "<")
+            tl.to(nextSlide, { opacity: 1 })
+            tl.set(activeSlide, { opacity: 0, visibility: "hidden" })
+
+            if (videoFigure.dataset.videoFig === "play") {
+                videoElem.pause()
+                videoFigure.currentTime = 0
+                videoFigure.dataset.videoFig = "stop"
+                tl.set(videoCaption, { opacity: 1 })
+            }
+        })
+
+        videoPlayBtn.addEventListener("click", e => {
+            if (e.target !== videoPlayBtn) {
+                return
+            }
+            let isPlaying = videoFigure.dataset.videoFig === "play"
+            let tl = gsap.timeline()
+
+            if (!isPlaying) {
+                videoElem.play()
+                tl.to(videoCaption, { opacity: 0 })
+                videoFigure.dataset.videoFig = "play"
+                return
+            }
+
+            videoElem.pause()
+            tl.to(videoCaption, { opacity: 1 })
+            videoFigure.dataset.videoFig = "pause"
+        })
+
+        // Amenity slider
+        let prevBtn = document.getElementById("slider-prev-btn")
+        let nextBtn = document.getElementById("slider-next-btn")
+        let sliderContainer = document.getElementById("slider-container")
+        let dotsContainer = document.getElementById("slider-dots-container")
+        let slides = document.querySelectorAll("[data-slider-slide]")
+
+        for (let slide of slides) {
+            let dot = document.createElement("span")
+            dot.classList.add("slider-dot", "bg-indigo-900")
+            dot.dataset.sliderDot = slide.dataset.sliderSlide
+            dot.addEventListener("click", () => scrollToSlide(parseInt(slide.dataset.sliderSlide)))
+
+            if (dot.dataset.sliderDot === "0") {
+                dot.classList.add("active")
+            }
+            
+            dotsContainer.appendChild(dot)
+        }
+        function scrollToSlide(slideIndex) {
+            const slideWidth = slides[0].offsetWidth;
+            sliderContainer.scrollTo({
+                left: slideWidth * slideIndex,
+                behavior: 'smooth'
+            });
+            updateActiveDot(slideIndex);
+        }
+        // Update the active dot
+        function updateActiveDot(activeIndex) {
+            let dots = document.querySelectorAll("[data-slider-dot]")
+
+            for (let dot of dots) {
+                let isActive = activeIndex === parseInt(dot.dataset.sliderDot)
+                dot.classList.toggle("active", isActive)
+            }
+        }
+
+        prevBtn.addEventListener("click", e => {
+            let activeSlide = document.querySelector(".active[data-slider-dot]")
+            let activeIndex = parseInt(activeSlide?.dataset.sliderDot) ?? 1 // 1 - 1 = 0; Reset active slide
+            scrollToSlide(activeIndex - 1)
+        })
+        nextBtn.addEventListener("click", e => {
+            let activeSlide = document.querySelector(".active[data-slider-dot]")
+            let activeIndex = parseInt(activeSlide?.dataset.sliderDot) ?? -1 // -1 + 1 = 0; Reset active slide
+            scrollToSlide(activeIndex + 1)
+        })
+    })
+</script>
+{{end}}
+{{define "content"}}
+<div class="hero-slider relative grid grid-cols-1 grid-rows-1 header h-[90vh] text-center text-stone-50 z-10">
+    <button class="absolute flex items-center justify-center top-1/2 -translate-y-1/2 left-2 w-10 h-10 z-40 bg-indigo-900 bg-opacity-50 active:bg-opacity-95" id="hero-slider-btn-prev">
+       <svg class="w-5 h-5 stroke-stone-50 rotate-180">
+           <use href="/static/svg/arrow.svg#arrow"></use>
+       </svg>
+    </button>
+    <button class="absolute flex items-center justify-center top-1/2 -translate-y-1/2 right-2 w-10 h-10 z-40 bg-indigo-900 bg-opacity-50 active:bg-opacity-95" id="hero-slider-btn-next">
+       <svg class="w-5 h-5 stroke-stone-50">
+           <use href="/static/svg/arrow.svg#arrow"></use>
+       </svg>
+    </button>
+    <figure class="relative col-start-1 row-start-1 flex flex-col items-center justify-center active opacity-100" id="hero-video-fig" data-video-fig="stop" data-hero-slider-slide="0">
+        <video 
+            width="1920" 
+            height="1080" 
+            id="hero-video-elem"
+            class="relative object-center object-cover w-full h-full z-10"
+            src="/static/demo-reel_4.mp4"
+            data-video-elem=""
+            playsinline 
+            poster="/static/demo-reel.jpg"
+            preload="auto">
+        </video>
+        <figcaption class="absolute top-1/2 -translate-y-1/2 left-0 right-0 space-y-4 z-20" id="hero-video-caption" data-video-caption="">
+            <h1 class="text-3xl font-semibold uppercase w-[20ch] mx-auto" style="font-family: 'Crimson Text', serif;">Lotes residenciales en Durango</h1>
+            <div class="space-y-2">
+                <span class="block mx-auto text-4xl">&#9658;</span>
+                <span class="block text-xs font-medium uppercase">Reproducir Video</span>
+            </div>
+        </figcaption>
+        <button type="button" id="hero-play-btn" class="w-full h-full absolute inset-0 opacity-0 z-30" data-btn-video-play=""></button>
+    </figure>
+    <figure class="relative col-start-1 row-start-1 flex flex-col items-center justify-center opacity-0 invisible" data-hero-slider-slide="1">
+        <div class="absolute w-full h-full bg-stone-800 bg-opacity-60 z-10"></div>
+        <img class="relative h-full w-auto object-center object-cover z-0" src="/static/img/top-bg.webp" alt="Residencial slider imagen 1">
+        <figcaption class="absolute top-1/2 -translate-y-1/2 left-0 right-0 space-y-4 z-20">
+            <h1 class="text-3xl font-semibold uppercase w-[20ch] mx-auto" style="font-family: 'Crimson Text', serif;">Lotes residenciales en Durango</h1>
+            <p class="max-w-[20ch] mx-auto">
+                Lotes desde 200 hasta 520m<sup>2</sup> en una de las zonas más exclusivas
+                de la ciudad de Durango disfruta de tranquilidad, seguridad y
+                amenidades premium.
+            </p>
+            <button class="mx-auto bg-stone-50 text-blue-700 rounded px-6 py-3">Solicitar cotización</button>
+        </figcaption>
+    </figure>
+    <figure class="relative col-start-1 row-start-1 flex flex-col items-center justify-center opacity-0 invisible" data-hero-slider-slide="2">
+        <div class="absolute w-full h-full bg-stone-800 bg-opacity-60 z-10"></div>
+        <img class="relative h-full w-auto object-center object-cover z-0" src="/static/img/top-bg.webp" alt="Residencial slider imagen 1">
+        <figcaption class="absolute top-1/2 -translate-y-1/2 left-0 right-0 space-y-4 z-20">
+            <h1 class="text-3xl font-semibold uppercase w-[20ch] mx-auto" style="font-family: 'Crimson Text', serif;">Lotes residenciales en Durango</h1>
+            <p class="max-w-[20ch] mx-auto">
+                Pregunta por nuestra disponibilidad y cotiza tu lote.
+            </p>
+            <button class="mx-auto bg-stone-50 text-blue-700 rounded px-6 py-3">Solicitar cotización</button>
+        </figcaption>
+    </figure>
+</div>
+<section class="section relative z-0 p-12 space-y-6">
+    <h1 class="text-3xl font-extrabold uppercase text-center text-indigo-900">Un residencial para ti y tu familia</h1>
+    <div class="space-y-2 text-stone-950">
+        <div class="mx-auto h-12 w-12">
+            <img class="w-full h-full" src="/static/img/fern.png" alt="Fern icon">
+        </div>
+        <p class="text-lg text-center font-semibold">Areas Verdes</p>
+        <p class="">
+            Residencial Imperio cuenta con más de 20,000m2 de áreas verdes,
+            para que tú como propietario de un terreno aquí,
+            puedas disfrutar de jardines,
+            amenidades y flora que tendremos disponibles.
+        </p>
+    </div>
+    <div class="space-y-2 text-stone-950">
+        <div class="mx-auto h-12 w-12">
+            <svg class="w-full h-full fill-stone-950">
+                <use href="/static/svg/lamppost.svg#lamppost"></use>
+            </svg>
+        </div>
+        <p class="text-lg text-center font-semibold">Servicios</p>
+        <p class="">
+            Cableado subterráneo en su totalidad,
+            pavimento hidráulico,
+            tecnología de última generación en alumbrado 
+            y equipo de seguridad.
+        </p>
+    </div>
+    <div class="space-y-2 text-stone-950">
+        <div class="mx-auto h-16 w-16">
+            <svg class="w-full h-full fill-stone-950">
+                <use href="/static/svg/security.svg#security"></use>
+            </svg>
+        </div>
+        <p class="text-lg text-center font-semibold">Seguridad</p>
+        <p class="">
+            Porque tu tranquilidad es prioridad para nosotros,
+            contaremos con circuito cerrado en todo el residencial,
+            una barda perimetral de 3 metros con cerca eléctrica 
+            y un equipo de seguridad en la caseta con accesos automatizados.
+        </p>
+    </div>
+</section>
+<section class="section relative z-0 p-4">
+    <div class="shadow-lg shadow-stone-200 bg-transparent overflow-hidden">
+        {{template "contact-form.html"}}
+        {{template "appointment-form.html"}}
+    </div>
+</section>
+<section class="relative z-0 p-10 space-y-6">
+    <!-- TODO: Picture -->
+    <h1 class="text-center text-3xl text-indigo-900 font-extrabold uppercase">Seguridad para tu inversión</h1>
+    <p class="">
+        A ti que buscas no solo un residencial para vivir sino una inversión segura,
+        Residencial Imperio es tu opción más rentable del mercado por su valor costo/beneficio.
+        Gracias a la gran ubicación con la que cuenta, con una conectividad inigualable,
+        fluidez vial, zona segura y una serie de amenidades de lujo a las que no puedes resistirte.
+    </p>
+    <div class="shadow-lg shadow-stone-100 space-y-8 p-4">
+        <div class="space-y-4 px-5">
+            <h3 class="text-2xl text-center font-black uppercase">Desde 200 M<sup>2</sup></h3>
+            <p class="text-center">
+                Nuestros lotes promedio son de 200m2,
+                sin embargo, contamos con lotes hasta de 500 m2 para desarrollar
+                lo que tengas en mente y el que espacio se adapte a tu proyecto.
+            </p>
+        </div>
+        <div class="space-y-4 px-5">
+            <h3 class="text-2xl text-center font-black uppercase">Avance de Obra</h3>
+            <p class="text-center">
+                Sabemos en Icandria lo importante que es para ti
+                visualizar constantemente como va la obra en el residencial,
+                de tal modo que nos comprometemos contigo para irte dando tranquilidad y confianza.
+            </p>
+        </div>
+    </div>
+</section>
+<section class="section section-img-bg relative z-0 p-10 py-20 space-y-6 text-stone-50" data-bg-src="/static/img/residencial.jpg">
+    <h1 class="relative text-3xl text-center font-extrabold uppercase z-0">Perfecto para ti y tu familia</h1>
+    <p class="text-center font-semibold">
+        DISFRUTA día a dia con tu FAMILIA y AMIGOS de amenidades que te haran sentir de VACACIONES
+    </p>
+    <div class="w-3/4 mx-auto">
+        <button class="w-full bg-stone-50 text-indigo-700 rounded px-4 py-2">Solicita una cotización</button>
+    </div>
+</section>
+<section class="relative z-0 space-y-6 py-12">
+    <h1 class="text-center text-3xl text-indigo-900 font-extrabold px-10 uppercase">Amenidades</h1>
+    <p class="px-10">
+        DISFRUTA día a día con tu FAMILIA Y AMIGOS de amenidades que te harán sentir de VACACIONES.
+    </p>
+    <div class="relative h-80 slider">
+        <div class="h-full flex items-center max-w-full overflow-auto snap-x snap-mandatory" id="slider-container">
+            <div class="flex flex-col items-center justify-center shrink-0 basis-full space-y-4 snap-center" data-slider-slide="0">
+                <div class="flex w-32 h-32 bg-indigo-900 rounded-full">
+                    <svg class="w-20 h-20 fill-stone-50 m-auto">
+                        <use href="/static/svg/greens.svg#greens"></use>
+                    </svg>
+                </div>
+                <p class="text-xl font-bold text-indigo-900">Areas Verdes</p>
+            </div>
+            <div class="flex flex-col items-center justify-center shrink-0 basis-full space-y-4 snap-center" data-slider-slide="1">
+                <div class="flex w-32 h-32 bg-indigo-900 rounded-full">
+                    <svg class="w-20 h-20 fill-stone-50 m-auto">
+                        <use href="/static/svg/greens.svg#greens"></use>
+                    </svg>
+                </div>
+                <p class="text-xl font-bold text-indigo-900">Gymnasio</p>
+            </div>
+            <div class="flex flex-col items-center justify-center shrink-0 basis-full space-y-4 snap-center" data-slider-slide="2">
+                <div class="flex w-32 h-32 bg-indigo-900 rounded-full">
+                    <svg class="w-20 h-20 fill-stone-50 m-auto">
+                        <use href="/static/svg/greens.svg#greens"></use>
+                    </svg>
+                </div>
+                <p class="text-xl font-bold text-indigo-900">Casa Club</p>
+            </div>
+        </div>
+        <div class="absolute top-1/2 left-2 -translate-y-1/2 p-2 bg-indigo-900 rounded-full pr-2" id="slider-prev-btn">
+            <svg class="w-6 h-6 stroke-stone-50 p-0.5 rotate-180">
+                <use href="/static/svg/arrow.svg#arrow"></use>
+            </svg>
+        </div>
+        <div class="absolute top-1/2 right-2 -translate-y-1/2 p-2 bg-indigo-900 rounded-full pl-2" id="slider-next-btn">
+            <svg class="w-6 h-6 stroke-stone-50 p-0.5">
+                <use href="/static/svg/arrow.svg#arrow"></use>
+            </svg>
+        </div>
+        <div class="absolute flex gap-2 bottom-2 left-1/2 -translate-x-1/2 h-2" id="slider-dots-container"></div>
+    </div>
+</section>
+<section class="relative z-0 p-10 space-y-6">
+    <h1 class="text-center text-3xl text-indigo-900 font-extrabold uppercase">Seguridad para tu inversión</h1>
+    <p class="">
+        A ti que buscas no solo un residencial para vivir sino una inversión segura,
+        Residencial Imperio es tu opción más rentable del mercado por su valor costo/beneficio.
+        Gracias a la gran ubicación con la que cuenta, con una conectividad inigualable,
+        fluidez vial, zona segura y una serie de amenidades de lujo a las que no puedes resistirte.
+    </p>
+</section>
+{{end}}

@@ -1,3 +1,54 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e6c2f6802736b854a147c5ca3ec8d5ee82a13f905976ac66b40edd9a4aa19aff
-size 2587
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let contactToggler = document.getElementById("contact-toggler")
+        let contactForm = document.getElementById("contact-form")
+
+        contactToggler.addEventListener("click", () => {
+            let tl = gsap.timeline()
+            let isOpen = contactForm.dataset.contactForm === "open"
+            let formHeight = contactForm.scrollHeight
+
+            if (!isOpen) {
+                tl.to(contactForm, { height: `calc(${formHeight}px + 1rem)`, paddingTop: "1rem" })
+                tl.to(contactToggler, { rotate: "-180deg" }, "<")
+
+                contactForm.dataset.contactForm = "open"
+                return
+            }
+
+            tl.to(contactForm, { height: "0px", paddingTop: "0rem" })
+                tl.to(contactToggler, { rotate: "0deg" }, "<")
+            contactForm.dataset.contactForm = "close"
+        })
+    })
+</script>
+<div class="bg-indigo-900 text-stone-50 pt-4 py-6 rounded-t-lg">
+    <div class="flex px-4">
+        <div class="space-y-4">
+            <h1 class="text-3xl">Solicitar contacto</h1>
+            <p class="">Un asesor te atendera y brindará toda la información que necesites</p>
+        </div>
+        <button type="button" class="my-auto" id="contact-toggler">
+            <svg class="w-6 h-6 stroke-stone-300 rotate-90">
+                <use href="/static/svg/arrow.svg#arrow"></use>
+            </svg>
+        </button>
+    </div>
+    <form class="px-4 space-y-4 h-0 overflow-hidden" id="contact-form" data-contact-form="close">
+        <div class="space-y-2">
+            <label for="name" class="text-xs uppercase">Nombre completo</label>
+            <input type="text" name="name" id="name" class="w-full py-2 px-4 rounded bg-stone-50 text-indigo-900" placeholder="Juan Perez" required>
+        </div>
+        <div class="space-y-2">
+            <label for="name" class="text-xs uppercase">Número de Teléfono</label>
+            <input type="tel" name="name" id="name" class="w-full py-2 px-4 rounded bg-stone-50 text-indigo-900" placeholder="618 123 22 33" required>
+        </div>
+        <div class="space-y-2">
+            <label for="name" class="text-xs uppercase">Email (opcional)</label>
+            <input type="email" name="email" id="email" class="w-full py-2 px-4 rounded bg-stone-50 text-indigo-900" placeholder="juan.p@gmail.com">
+        </div>
+        <div class="pt-2">
+            <button type="submit" class="w-full bg-stone-50 text-stone-950 font-medium py-2 px-4 rounded uppercase">Enviar</button>
+        </div>
+    </form>
+</div>

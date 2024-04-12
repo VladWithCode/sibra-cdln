@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:adadcd43d7b89bf26aa78b0b8f7477fd5bdd0fe426425fd95750deec08fe0f82
-size 944
+package pgproto3
+
+import (
+	"encoding/json"
+)
+
+type BindComplete struct{}
+
+// Backend identifies this message as sendable by the PostgreSQL backend.
+func (*BindComplete) Backend() {}
+
+// Decode decodes src into dst. src must contain the complete message with the exception of the initial 1 byte message
+// type identifier and 4 byte message length.
+func (dst *BindComplete) Decode(src []byte) error {
+	if len(src) != 0 {
+		return &invalidMessageLenErr{messageType: "BindComplete", expectedLen: 0, actualLen: len(src)}
+	}
+
+	return nil
+}
+
+// Encode encodes src into dst. dst will include the 1 byte message type identifier and the 4 byte message length.
+func (src *BindComplete) Encode(dst []byte) ([]byte, error) {
+	return append(dst, '2', 0, 0, 0, 4), nil
+}
+
+// MarshalJSON implements encoding/json.Marshaler.
+func (src BindComplete) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Type string
+	}{
+		Type: "BindComplete",
+	})
+}

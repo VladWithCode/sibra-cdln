@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c02a1e21a1d2d5de67107b3cc6f90312e103a12a83c0bc3e69a7b1e8f7a5ff1f
-size 807
+<?xml version="1.0" ?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg viewBox="0 0 100 100" id="greens" xmlns="http://www.w3.org/2000/svg">
+    <title/>
+    <circle cx="19.48" cy="46.04" r="11.65"/>
+    <circle cx="60.25" cy="51.87" r="11.65"/>
+    <circle cx="42.78" cy="23.72" r="17.47"/>
+    <circle cx="78.69" cy="67.4" r="8.74"/>
+    <circle cx="89.85" cy="81.47" r="6.31"/>
+    <circle cx="65.59" cy="78.56" r="6.31"/>
+    <path d="M58.69,53,42.81,64.47V29.54a1,1,0,1,0-2,0V58.78L21,46.17a1,1,0,1,0-1.07,1.69L40.81,61.15V94.57a1,1,0,0,0,2,0V66.94l17-12.32A1,1,0,1,0,58.69,53Z"/>
+    <path d="M89.29,82.48A1,1,0,0,0,88,82l-8.26,4.13V70.31a1,1,0,0,0-2,0V83.54l-11.18-5.4A1,1,0,1,0,65.64,80l12,5.81v8.81a1,1,0,0,0,2,0V88.4l9.15-4.58A1,1,0,0,0,89.29,82.48Z"/>
+</svg>

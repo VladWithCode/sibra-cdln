@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:65b7fc8bccac55ae4f7d731ada9f8c8c67fde5a1c3912e21f2fd78049e9172b7
-size 494
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+	"github.com/vladwithcode/sibra-cdln/internal/routes"
+)
+
+func main() {
+	godotenv.Load(".env")
+
+	portStr := os.Getenv("PORT")
+	if portStr == "" {
+		portStr = "8080"
+	}
+	addr := fmt.Sprintf(":%v", portStr)
+	fmt.Printf("Server listening on http://localhost%v\n", addr)
+
+	router := routes.NewRouter()
+
+	err := http.ListenAndServe(addr, router)
+
+	if err != nil {
+		log.Fatalf("Couldn't start server: %v", err)
+	}
+}
