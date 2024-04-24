@@ -32,6 +32,8 @@
             let logoColor = document.querySelector("[data-logo-color]")
             let navMenu = document.querySelector("[data-nav-menu]")
             let menuHeight = navMenu.scrollHeight
+            let wrapperHeight = wrapper.scrollHeight
+            let isFixed = false
 
             gsap.to(logoWhite, { y: "0%", duration: 0.7 })
 
@@ -40,28 +42,64 @@
                 let tl = gsap.timeline({ ease: "power2.in", duration: 0.3 })
 
                 if (navOpen) {
-                    tl.to(wrapper, { background: "transparent" })
-                    tl.to(toggler, { color: "#fafaf9" }, "<")
-                    tl.to(navMenu, { height: `0px`, opacity: 0 }, "<")
-                    tl.to(logoColor, { y: "0%", opacity: 0 }, "<")
-                    tl.fromTo(logoWhite, { y: "-100%", opacity: 0 }, { y: "0%", opacity: 1 }, "<")
-                    tl.set(logoColor, { visibility: "hidden" }, "<")
-
                     wrapper.dataset.wrapper = "closed"
+
+                    if (!isFixed) {
+                        tl.to(wrapper, { background: "transparent" })
+                        tl.to(toggler, { color: "#fafaf9" }, "<")
+                        tl.to(logoColor, { y: "0%", opacity: 0 }, "<")
+                        tl.fromTo(logoWhite, { y: "-100%", opacity: 0 }, { y: "0%", opacity: 1 }, "<")
+                        tl.set(logoColor, { visibility: "hidden" }, "<")
+                    }
+                    tl.to(navMenu, { height: `0px`, opacity: 0 }, "<")
+
                     return
                 }
 
                 wrapper.dataset.wrapper = "open"
-                tl.to(wrapper, { background: "#fafaf9" })
-                tl.to(toggler, { color: '#0c0a09' }, "<")
+                if (!isFixed) {
+                    tl.to(wrapper, { background: "#fafaf9" })
+                    tl.to(toggler, { color: '#0c0a09' }, "<")
+                    tl.set(logoColor, { visibility: "visible" }, "<")
+                    tl.to(logoWhite, { opacity: 0 }, "<")
+                    tl.fromTo(logoColor, { y: "-200%", opacity: 0 }, { y: "-100%", opacity: 1 }, "<")
+                }
                 tl.to(navMenu, { height: `${menuHeight}px`, opacity: 1 }, "<")
+            })
+
+            // Sticky navbar
+            let observerOpts = {
+                threshold: 0.2,
+            }
+            let observer = new IntersectionObserver(function (entries, observer){
+                let target = entries[0]
+                let tl = gsap.timeline({ duration: 0.3, ease: "power3.out" })
+
+                if (target.isIntersecting) {
+                    isFixed = false
+                    tl.fromTo(wrapper, { y: "-100%" }, { y: "0%", background: "transparent", boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)" })
+                    tl.to(toggler, { color: "#fafaf9" }, "<")
+                    tl.to(logoColor, { y: "0%", opacity: 0 }, "<")
+                    tl.fromTo(logoWhite, { y: "-100%", opacity: 0 }, { y: "0%", opacity: 1 }, "<")
+                    tl.set(logoColor, { visibility: "hidden" }, "<")
+
+                    return 
+                } 
+
+                isFixed = true
+                tl.set(wrapper, { position: "fixed", y: "-100%", boxShadow: "0px 3px 5px -2px #a2a89e" })
+                tl.to(wrapper, { y: "0%", background: "#fafaf9" })
+                tl.to(toggler, { color: '#0c0a09' }, "<")
                 tl.set(logoColor, { visibility: "visible" }, "<")
                 tl.to(logoWhite, { opacity: 0 }, "<")
                 tl.fromTo(logoColor, { y: "-200%", opacity: 0 }, { y: "-100%", opacity: 1 }, "<")
-            })
+            }, observerOpts)
+
+            observer.observe(document.getElementById("observer-trigger"))
         })
     </script>
-    <header class="absolute top-0 left-0 right-0 grid grid-cols-3 grid-row-1 items-center content-center h-20 bg-transparent px-4 z-30" data-nav-wrapper="closed">
+    <div class="absolute top-0 left-0 right-0 h-40 bg-transparent opacity-0 pointer-events-none" id="observer-trigger"></div>
+    <header class="absolute top-0 left-0 right-0 grid grid-cols-3 grid-row-1 items-center content-center h-20 bg-transparent px-4 z-30 md:h-32" data-nav-wrapper="closed" id="header">
         <div class="row-start-1 col-start-1 flex flex-col w-8 aspect-square justify-evenly items-end text-stone-50" data-nav-toggler="false">
             <span class="bg-current rounded-full h-1 w-full"></span>
             <span class="bg-current rounded-full h-1 w-11/12"></span>
