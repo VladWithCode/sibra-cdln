@@ -2,5 +2,11 @@
     <svg class="w-32 h-32 mx-auto fill-emerald-500">
         <use href="/static/svg/success.svg#success"></use>
     </svg>
-    <p class="text-stone-50 text-center">Cita agendada con exito</p>
+    <p class="text-stone-50 text-center">
+    {{with .Message}}
+    {{.}}
+    {{else}}
+    Operación exitosa
+    {{end}}
+    </p>
 </div>
