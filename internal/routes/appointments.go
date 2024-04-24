@@ -56,12 +56,14 @@ func CreateNewAppointment(w http.ResponseWriter, r *http.Request) {
 
 	date := time.Time{}
 
-	err = date.UnmarshalText([]byte(strDate + "-06:00"))
+	if strDate != "" {
+		err = date.UnmarshalText([]byte(strDate + "-06:00"))
 
-	if err != nil {
-		fmt.Printf("Unmarshal date: %v\n", err)
-		respondWithError(w, http.StatusInternalServerError, ErrorParams{})
-		return
+		if err != nil {
+			fmt.Printf("Unmarshal date: %v\n", err)
+			respondWithError(w, http.StatusInternalServerError, ErrorParams{})
+			return
+		}
 	}
 
 	phone, err = formatPhone(phone)
@@ -154,7 +156,9 @@ func CreateNewAppointment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = templ.Execute(w, nil)
+	err = templ.Execute(w, map[string]string{
+		"Message": "Cita generada con exito.\nPronto te contactaremos para confirmar tu cita",
+	})
 
 	if err != nil {
 		fmt.Printf("Execute Files err: %v\n", err)
