@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/vladwithcode/sibra-cdln/internal"
 	"github.com/vladwithcode/sibra-cdln/internal/db"
@@ -122,7 +123,12 @@ func SendNewAppointmentNotification(appointmentData *db.Appointment) error {
 		bodyVars   []TemplateVar
 	)
 
-	dateStr := internal.FormatDate(appointmentData.Date)
+	var dateStr string
+	if appointmentData.Date == (time.Time{}) {
+		dateStr = "Sin fecha especifica"
+	} else {
+		dateStr = internal.FormatDate(appointmentData.Date)
+	}
 	createdDateStr := internal.FormatDate(appointmentData.CreatedAt)
 
 	headerVars = append(headerVars, TemplateVar{

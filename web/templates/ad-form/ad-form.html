@@ -1,0 +1,294 @@
+{{define "header"}}
+<header class="absolute top-0 left-0 right-0 grid grid-cols-3 grid-row-1 items-center content-center h-20 bg-transparent px-4 z-30" data-nav-wrapper="closed">
+    <div class="row-start-1 col-start-2 relative self-center justify-self-center max-h-[55px] overflow-hidden" data-logo-container="">
+        <img src="/static/img/logow_256.webp" alt="Logo Residencial Imperio blanco" class="w-16 h-auto -translate-y-full" data-logo-white="">
+        <img src="/static/img/logo_256.webp" alt="Logo Residencial Imperio colores" class="w-16 h-auto invisible opacity-0" data-logo-color="">
+    </div>
+</header>
+{{end}}
+{{define "content"}}
+<link rel="stylesheet" href="/static/vanilla-calendar.min.css">
+<script src="/static/js/vanilla-calendar.min.js" defer></script>
+<script>
+    const dateFormat = Intl.DateTimeFormat(
+        "es-ES",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+            timeZone: "America/Mexico_City",
+        },
+    )
+    document.addEventListener("DOMContentLoaded", () => {
+        let logoWhite = document.querySelector("[data-logo-white]")
+
+        gsap.to(logoWhite, { y: "0%", duration: 0.7 })
+
+        let appointmentWrapper = document.getElementById("form-wrapper")
+        let appointmentDatepicker = document.getElementById("appointment-form-datepicker")
+        let appointmentInputWrapper = document.getElementById("form-inputs")
+        let appointmentConfirm = document.getElementById("appointment-confirm")
+        let appointmentFormInputs = document.getElementById("appointment-form-inputs")
+        let appointmentSpinner = document.getElementById("appointment-spinner")
+        let nextBtns = document.querySelectorAll("[data-appointment-next-btn]")
+        let backBtns = document.querySelectorAll("[data-appointment-back-btn]")
+        let formTitle = document.getElementById("form-title")
+        let tl = gsap.timeline({ duration: 0.5, ease: "power2.inOut" })
+
+        tl.set(appointmentInputWrapper, { height: `${appointmentFormInputs.scrollHeight}px` })
+        tl.to(formTitle, { y: 0, opacity: 1 })
+        tl.to(appointmentWrapper, { y: 0, opacity: 1 }, "<0.3")
+        tl.to(appointmentFormInputs, { x: 0, opacity: 1 }, "<0.1")
+
+        let dateInp = document.querySelector("[data-appointment-date]")
+        let dateDisplay = document.getElementById("appointment-date-display")
+
+        let date = new Date()
+        let y = date.getFullYear()
+        let m = numberTo2DigitString(date.getMonth() + 1)
+        let d = numberTo2DigitString(date.getDate() + 1)
+        let nextM = numberTo2DigitString(m+1)
+        
+        let minDate = `${y}-${m}-01`
+        let maxDate = `${y}-${nextM}-31`
+        let calendar = new VanillaCalendar(
+            "#appointment-datepicker",
+            {
+                date: {
+                    min: minDate,
+                    max: maxDate,
+                },
+                settings: {
+                    lang: "es",
+                    range: {
+                        disablePast: true,
+                    },
+                    selection: {
+                        time: 24,
+                        controlTime: "range",
+                        stepMinutes: 15,
+                    },
+                    selected: {
+                        dates: [`${y}-${m}-${d}`],
+                        time: "09:00 AM",
+                    }
+                },
+                actions: {
+                    clickDay: (e, self) => {
+                        if (!self.selectedDates[0]) {
+                            dateDisplay.textContent = "Sin fecha especifica"
+                            dateInp.value = ""
+                            return
+                        }
+                        let date = new Date(self.selectedDates[0])
+                        let y = date.getFullYear()
+                        let m = numberTo2DigitString(date.getMonth() + 1)
+                        let d = numberTo2DigitString(date.getDate() + 1)
+                        let dateStr = `${y}-${m}-${d}T${self.selectedHours}:${self.selectedMinutes}:00`
+
+                        dateDisplay.textContent = dateFormat.format(new Date(dateStr))
+                        dateInp.value = dateStr
+                    },
+                    changeTime: (e, self) => {
+                        if (!self.selectedDates[0]) {
+                            dateDisplay.textContent = "Sin fecha especifica"
+                            dateInp.value = ""
+                            return
+                        }
+
+                        let date = new Date(self.selectedDates[0])
+                        let y = date.getFullYear()
+                        let m = numberTo2DigitString(date.getMonth() + 1)
+                        let d = numberTo2DigitString(date.getDate() + 1)
+                        let dateStr = `${y}-${m}-${d}T${self.selectedHours}:${self.selectedMinutes}:00`
+
+                        dateDisplay.textContent = dateFormat.format(new Date(dateStr))
+                        dateInp.value = dateStr
+                    }
+                }
+            }
+        )
+
+        for (let btn of backBtns) {
+            btn.addEventListener("click", e => {
+                let currentStep = parseInt(appointmentWrapper.dataset.currentStep)
+                let prevStepElement = document.querySelector(`[data-appointment-step="${currentStep}"]`)
+                let nextStepElement = document.querySelector(`[data-appointment-step="${currentStep-1}"]`)
+                let tl = gsap.timeline({ duration: 0.3, ease: "power2.inOut" })
+
+                tl.to(appointmentInputWrapper, { height: `${nextStepElement.scrollHeight}px` })
+                tl.to(prevStepElement, { x: "100%", opacity: 0 }, "<")
+                tl.to(nextStepElement, { x: "0%", opacity: 1 }, "<")
+
+                appointmentWrapper.dataset.appointmentCurrentStep = currentStep - 1
+            })
+        }
+
+        for (let btn of nextBtns){
+            btn.addEventListener("click", e => {
+                let currentStep = parseInt(appointmentWrapper.dataset.appointmentCurrentStep)
+                let prevStepElement = document.querySelector(`[data-appointment-step="${currentStep}"]`)
+                let nextStepElement = document.querySelector(`[data-appointment-step="${currentStep+1}"]`)
+
+                if (nextStepElement === appointmentConfirm) {
+                    let nameDisplay = document.getElementById("appointment-confirm-name")
+                    let phoneDisplay = document.getElementById("appointment-confirm-phone")
+                    let dateDisplay = document.getElementById("appointment-confirm-date")
+
+                    let date = appointmentWrapper.elements.date.value
+                    let name = appointmentWrapper.elements.name.value
+                    let phone = appointmentWrapper.elements.phone.value
+                    
+                    nameDisplay.textContent = name
+                    phoneDisplay.textContent = phone
+
+                    if (date !== "") {
+                        dateDisplay.textContent = dateFormat.format(new Date(date))
+                    } else {
+                        dateDisplay.textContent = "Sin fecha especifica"
+                    }
+                }
+
+                let tl = gsap.timeline({ duration: 0.3, ease: "power2.inOut" })
+
+                tl.to(appointmentInputWrapper, { height: `${nextStepElement.scrollHeight}px` })
+                tl.to(prevStepElement, { x: "-100%", opacity: 0 }, "<")
+                tl.to(nextStepElement, { x: "0%", opacity: 1 }, "<")
+
+                appointmentWrapper.dataset.appointmentCurrentStep = currentStep + 1
+            })
+        }
+
+        appointmentInputWrapper.addEventListener("submit", e => {
+            e.preventDefault()
+
+            let newFormHeight = appointmentSpinner.offsetHeight
+            let tl = gsap.timeline({ duration: 0.3 })
+
+            tl.to(appointmentConfirm, { x: "100%", opacity: 0 })
+            tl.to(appointmentSpinner, { x: "0%", opacity: 1 }, "<")
+            tl.to(appointmentInputWrapper, { height: `${newFormHeight}px` }, "<0.15")
+
+            appointmentInputWrapper.dataset.appointmentCurrentStep = appointmentSpinner.dataset.appointmentStep
+        })
+
+        calendar.init()
+
+        document.addEventListener("htmx:beforeSwap", e => {
+            if (e.detail.xhr.status === 500) {
+                let resType = e.detail.xhr.getResponseHeader("Content-Type")
+                console.log(resType)
+
+                if (resType.includes("text/html")) {
+                    e.detail.shouldSwap = true
+                }
+            }
+        })
+        document.addEventListener("htmx:afterSwap", e => {
+            let resultElem = document.getElementById("appointment-result")
+            if (resultElem) {
+                let tl = gsap.timeline({ duration: 0.3 })
+                tl.to(resultElem, { x: "0%", opacity: 1 })
+                let currentStep = parseInt(appointmentInputWrapper.dataset.appointmentCurrentStep)
+                currentStep++;
+                appointmentInputWrapper.dataset.appointmentCurrentStep = currentStep
+                resultElem.dataset.appointmentStep = currentStep
+
+                return
+            }
+        })
+    })
+    function numberTo2DigitString(n) {
+        if (isNaN(n)) return n
+
+        if (n < 10) 
+            return "0"+n
+        
+        return String(n)
+    }
+</script>
+<div class="relative flex flex-col inset-0 min-h-screen text-stone-50 p-4">
+    <img src="/static/img/top-bg.webp" class="absolute h-full -z-10 inset-0 object-cover object-center" />
+    <div class="absolute -z-10 inset-0 bg-stone-800 bg-opacity-80"></div>
+    <h2 class="block text-5xl text-center font-light mx-auto pt-20 pb-4 px-8 translate-y-full opacity-0" id="form-title">Residencial Imperio</h2>
+    <form
+        class="relative max-w-lg flex flex-col bg-stone-900 shadow shadow-stone-800 rounded z-0 p-4 pb-8 m-auto translate-y-full opacity-0 overflow-hidden md:mt-24" 
+        id="form-wrapper"
+        data-appointment-form="close" 
+        data-appointment-current-step="0"
+        hx-post="/api/appointments"
+        hx-target="#form-inputs" >
+        <h1 class="text-3xl font-semibold mb-4 px-4">Agenda tu cita</h1>
+        <div class="grid" id="form-inputs">
+            <input type="hidden" name="date" id="date" data-appointment-date="">
+            <div id="appointment-form-inputs" class="relative col-start-1 row-start-1 space-y-4 p-4 pb-0 opacity-0 translate-x-full self-start" data-appointment-step="0">
+                <p class="flex font-medium justify-between items-center text-sm">
+                    <span>Ingresa tu nombre y un numero telefonico para comunicarnos contigo</span>
+                </p>
+                <div class="space-y-2">
+                    <label for="name" class="text-xs uppercase">Nombre completo</label>
+                    <input type="text" name="name" id="name" class="w-full py-2 px-4 rounded bg-stone-50 text-indigo-900" placeholder="Juan Perez" required>
+                </div>
+                <div class="space-y-2">
+                    <label for="name" class="text-xs uppercase">Número de Teléfono</label>
+                    <input type="tel" name="phone" id="phone" class="w-full py-2 px-4 rounded bg-stone-50 text-indigo-900" placeholder="618 123 22 33" required>
+                </div>
+                <div class="pt-2">
+                    <button class="w-full bg-indigo-600 font-medium py-2 rounded uppercase" type="button" id="appointment-confirm-btn" data-appointment-next-btn="">Continuar</button>
+                </div>
+            </div>
+            <div id="appointment-form-datepicker" class="relative col-start-1 row-start-1 p-4 pb-0 opacity-0 translate-x-full space-y-4 self-start" data-appointment-step="1">
+                <div class="flex w-full text-lg font-medium items-center">
+                    <button class="flex items-center text-stone-400" type="button" data-appointment-back-btn="">
+                        <svg class="w-4 h-4 stroke-current rotate-180">
+                            <use href="/static/svg/arrow.svg#arrow"></use>
+                        </svg>
+                        <span class="inline-block text-xs">Volver</span>
+                    </button>
+                    <p class="w-[20ch] text-sm ml-auto">Elige una fecha para tu cita (opcional)</p>
+                </div>
+                <div class="mx-auto" id="appointment-datepicker"></div>
+                <div class="text-sm font-medium" id="appointment-date-display">Sin fecha especifica</div>
+                <button class="w-full bg-indigo-600 font-medium py-2 rounded uppercase" type="button" id="appointment-next-step" data-appointment-next-btn="">Continuar</button>
+            </div>
+            <div id="appointment-confirm" class="relative col-start-1 row-start-1 space-y-4 p-4 pb-0 opacity-0 translate-x-full self-start" data-appointment-step="2">
+                <p class="flex text-lg font-medium justify-between items-center">
+                    <button class="flex items-center text-stone-400" type="button" data-appointment-back-btn="">
+                        <svg class="w-4 h-4 stroke-current rotate-180">
+                            <use href="/static/svg/arrow.svg#arrow"></use>
+                        </svg>
+                        <span class="inline-block text-xs">Volver</span>
+                    </button>
+                    <span class="w-[20ch] text-sm ml-auto">Confirma que los datos que enviaras sean correctos.</span>
+                </p>
+                <div class="space-y-1 text-stone-400">
+                    <p class="font-medium">Nombre</p>
+                    <p id="appointment-confirm-name">&nbsp;</p>
+                </div>
+                <div class="space-y-1 text-stone-400">
+                    <p class="font-medium">Teléfono</p>
+                    <p id="appointment-confirm-phone">&nbsp;</p>
+                </div>
+                <div class="space-y-1 text-stone-400">
+                    <p class="font-medium">Fecha</p>
+                    <p id="appointment-confirm-date">&nbsp;</p>
+                </div>
+                <div class="pt-2">
+                    <button class="w-full bg-indigo-600 font-medium py-2 rounded uppercase" type="submit" id="appointment-submit-btn">Confirmar y Enviar</button>
+                </div>
+            </div>
+            <div id="appointment-spinner" class="relative col-start-1 row-start-1 p-4 pb-2 space-y-4 opacity-0 translate-x-full self-start justify-self-center" data-appointment-spinner="idle" data-appointment-step="3">
+                <div class="border-8 border-transparent border-l-indigo-500 rounded-full h-32 w-32 animate-spin mx-auto"></div>
+                <p class="font-medium">Tu cita está siendo generada</p>
+            </div>
+            {{with .ErrorMessage}}<p class="text-red-500 font-medium px-4 mt-2">{{.}}</p>{{end}}
+        </div>
+    </form>
+</div>
+{{end}}
+{{define "footer"}}
+<footer></footer>
+{{end}}

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/static/styles.css" />
     <script src="/static/js/htmx.js"></script>
     <script src="/static/js/gsap.js"></script>
+    <script src="/static/js/gsap-observer-plugin.js"></script>
     {{block "head" .}}
     {{end}}
 </head>
@@ -105,14 +106,14 @@
             <span class="bg-current rounded-full h-1 w-11/12"></span>
             <span class="bg-current rounded-full h-1 w-4/5"></span>
         </div>
-        <div class="row-start-1 col-start-2 relative self-center justify-self-center max-h-[55px] overflow-hidden" data-logo-container="">
-            <img src="/static/img/logow_256.webp" alt="Logo Residencial Imperio blanco" class="w-16 h-auto -translate-y-full" data-logo-white="">
-            <img src="/static/img/logo_256.webp" alt="Logo Residencial Imperio colores" class="w-16 h-auto invisible opacity-0" data-logo-color="">
+        <div class="row-start-1 col-start-2 relative self-center justify-self-center max-h-[55px] overflow-hidden md:max-h-[96.25px]" data-logo-container="">
+            <img src="/static/img/logow_256.webp" alt="Logo Residencial Imperio blanco" class="w-16 h-auto -translate-y-full md:w-28" data-logo-white="">
+            <img src="/static/img/logo_256.webp" alt="Logo Residencial Imperio colores" class="w-16 h-auto invisible opacity-0 md:w-28" data-logo-color="">
         </div>
         <div class="row-start-1 col-start-3 justify-self-end">
-            <button class="px-4 py-2 bg-indigo-900 rounded-sm text-stone-50 text-xs font-medium tracking-wide uppercase">Reservar</button>
+            <a href="#formulario-cita" class="block px-4 py-2 bg-indigo-900 rounded-sm text-stone-50 text-xs text-center font-medium tracking-wide uppercase">Reservar</a>
         </div>
-        <div class="nav-menu fixed top-20 left-0 right-0 bg-stone-50 z-0 h-0 opacity-0 overflow-hidden" data-nav-menu="">
+        <div class="nav-menu fixed top-20 left-0 right-0 bg-stone-50 z-0 h-0 opacity-0 overflow-hidden md:top-32" data-nav-menu="">
             <ul class="text-stone-950 uppercase">
                 <li class="py-2 px-4 border-stone-400 border-b border-t">
                     <a href="/" class="">Inicio</a>
@@ -139,6 +140,38 @@
     </main>
 
     {{block "footer" .}}
+    <footer class="text-stone-100 bg-slate-900">
+        <div class="px-4 py-12 space-y-4 font-medium">
+            <div class="space-y-2">
+                <h3 class="text-lg font-semibold text-slate-500">Encuentranos en</h3>
+                <p class="space-y-2">
+                Gral. Anaya 101, Juan de la Barrera, 34150 Durango, Dgo.            
+                </p>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-lg font-semibold text-slate-600">Llamanos al</h3>
+                <p class="space-y-2">
+                Matriz
+                Gral. Anaya 101, Juan de la Barrera, 34150 Durango, Dgo.
+                618-194-1145
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center px-2 pt-6 gap-8">
+                <!-- <img class="w-32 " src="/static/img/logo_512.webp" alt="logo_imperio"> -->
+                <img class="w-44 my-auto" src="/static/img/sibra_logo_256.webp" alt="logo_sibra">
+            </div>
+        </div>
+        <div class="relative grid z-0 py-8 text-stone-50">
+            <div class="absolute inset-0 z-0 overflow-hidden">
+                <div class="absolute z-10 inset-0 bg-stone-900 opacity-80"></div>
+                <img src="/static/demo-reel.jpg" alt="fondo footer" class="absolute inset-0 z-0 w-full object-center object-cover">
+            </div>
+            <div class="relative logo self-center justify-self-center space-y-4 z-10">
+                <img src="/static/img/logo_512.webp" alt="Logo Residencial Imperio" class="w-32 m-auto">
+                <p class="text-xl font-medium">Residencial Imperio</p>
+            </div>
+        </div>
+    </footer>
     {{end}}
 </body>
 </html>

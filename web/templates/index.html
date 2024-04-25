@@ -161,13 +161,13 @@
 {{end}}
 {{define "content"}}
 <div class="hero-slider relative grid grid-cols-1 grid-rows-1 header h-[90vh] text-center text-stone-50 z-10">
-    <button class="absolute flex items-center justify-center top-1/2 -translate-y-1/2 left-2 w-10 h-10 z-40 bg-indigo-900 bg-opacity-50 active:bg-opacity-95" id="hero-slider-btn-prev">
-       <svg class="w-5 h-5 stroke-stone-50 rotate-180">
+    <button class="absolute flex items-center justify-center top-1/2 -translate-y-1/2 left-2 w-10 h-10 z-40 bg-indigo-900 bg-opacity-50 active:bg-opacity-95 md:w-12 md:h-12" id="hero-slider-btn-prev">
+       <svg class="w-5 h-5 stroke-stone-50 rotate-180 md:w-7 md:h-7">
            <use href="/static/svg/arrow.svg#arrow"></use>
        </svg>
     </button>
-    <button class="absolute flex items-center justify-center top-1/2 -translate-y-1/2 right-2 w-10 h-10 z-40 bg-indigo-900 bg-opacity-50 active:bg-opacity-95" id="hero-slider-btn-next">
-       <svg class="w-5 h-5 stroke-stone-50">
+    <button class="absolute flex items-center justify-center top-1/2 -translate-y-1/2 right-2 w-10 h-10 z-40 bg-indigo-900 bg-opacity-50 active:bg-opacity-95 md:w-12 md:h-12" id="hero-slider-btn-next">
+       <svg class="w-5 h-5 stroke-stone-50 md:w-7 md:h-7">
            <use href="/static/svg/arrow.svg#arrow"></use>
        </svg>
     </button>
@@ -183,10 +183,10 @@
             poster="/static/demo-reel.jpg"
             preload="auto">
         </video>
-        <figcaption class="absolute top-1/2 -translate-y-1/2 left-0 right-0 space-y-4 z-20" id="hero-video-caption" data-video-caption="">
-            <h1 class="text-3xl font-semibold uppercase w-[20ch] mx-auto" style="font-family: 'Crimson Text', serif;">Lotes residenciales en Durango</h1>
-            <div class="space-y-2">
-                <span class="block mx-auto text-4xl">&#9658;</span>
+        <figcaption class="absolute top-1/2 -translate-y-1/2 left-0 right-0 space-y-4 z-20 md:space-y-12" id="hero-video-caption" data-video-caption="">
+            <h1 class="text-3xl font-semibold uppercase w-[20ch] mx-auto md:text-5xl" style="font-family: 'Crimson Text', serif;">Lotes residenciales en Durango</h1>
+            <div class="space-y-2 md:space-y-4">
+                <span class="block mx-auto text-3xl md:text-5xl">&#9658;</span>
                 <span class="block text-xs font-medium uppercase">Reproducir Video</span>
             </div>
         </figcaption>
@@ -202,7 +202,7 @@
                 de la ciudad de Durango disfruta de tranquilidad, seguridad y
                 amenidades premium.
             </p>
-            <button class="mx-auto bg-stone-50 text-blue-700 rounded px-6 py-3">Solicitar cotización</button>
+            <a href="#formulario-cita" class="mx-auto bg-stone-50 text-blue-700 rounded px-6 py-3">Solicitar cotización</a>
         </figcaption>
     </figure>
     <figure class="relative col-start-1 row-start-1 flex flex-col items-center justify-center opacity-0 invisible" data-hero-slider-slide="2">
@@ -217,42 +217,42 @@
         </figcaption>
     </figure>
 </div>
-<section class="section relative z-0 p-12 space-y-6">
-    <h1 class="text-3xl font-extrabold uppercase text-center text-indigo-900">Un residencial para ti y tu familia</h1>
-    <div class="space-y-2 text-stone-950">
+<section class="section grid grid-cols-3 grid-rows-[min-content] gap-y-8 gap-x-16 auto-rows-fr relative z-0 p-12 space-y-6 xl:max-w-screen-lg md:mx-auto">
+    <h1 class="text-3xl font-extrabold uppercase text-center text-indigo-900 col-span-full">Un residencial para ti y tu familia</h1>
+    <div class="col-span-full space-y-2 text-stone-950 xl:col-span-1">
         <div class="mx-auto h-12 w-12">
             <img class="w-full h-full" src="/static/img/fern.png" alt="Fern icon">
         </div>
         <p class="text-lg text-center font-semibold">Areas Verdes</p>
-        <p class="">
+        <p class="w-[34ch] max-w-full mx-auto">
             Residencial Imperio cuenta con más de 20,000m2 de áreas verdes,
             para que tú como propietario de un terreno aquí,
             puedas disfrutar de jardines,
             amenidades y flora que tendremos disponibles.
         </p>
     </div>
-    <div class="space-y-2 text-stone-950">
+    <div class="col-span-full space-y-2 text-stone-950 xl:col-span-1">
         <div class="mx-auto h-12 w-12">
             <svg class="w-full h-full fill-stone-950">
                 <use href="/static/svg/lamppost.svg#lamppost"></use>
             </svg>
         </div>
         <p class="text-lg text-center font-semibold">Servicios</p>
-        <p class="">
+        <p class="w-[34ch] max-w-full mx-auto">
             Cableado subterráneo en su totalidad,
             pavimento hidráulico,
             tecnología de última generación en alumbrado 
             y equipo de seguridad.
         </p>
     </div>
-    <div class="space-y-2 text-stone-950">
-        <div class="mx-auto h-16 w-16">
+    <div class="col-span-full space-y-2 text-stone-950 xl:col-span-1">
+        <div class="mx-auto h-12 w-12">
             <svg class="w-full h-full fill-stone-950">
                 <use href="/static/svg/security.svg#security"></use>
             </svg>
         </div>
         <p class="text-lg text-center font-semibold">Seguridad</p>
-        <p class="">
+        <p class="w-[34ch] max-w-full mx-auto">
             Porque tu tranquilidad es prioridad para nosotros,
             contaremos con circuito cerrado en todo el residencial,
             una barda perimetral de 3 metros con cerca eléctrica 
@@ -260,8 +260,8 @@
         </p>
     </div>
 </section>
-<section class="section relative z-0 p-4">
-    <div class="shadow-lg shadow-stone-200 bg-transparent overflow-hidden">
+<section class="section relative z-0 p-4 xl:py-16">
+    <div class="shadow-lg shadow-stone-200 bg-transparent overflow-hidden md:max-w-lg md:mx-auto">
         {{template "contact-form.html"}}
         {{template "appointment-form.html"}}
     </div>
@@ -300,7 +300,7 @@
         DISFRUTA día a dia con tu FAMILIA y AMIGOS de amenidades que te haran sentir de VACACIONES
     </p>
     <div class="w-3/4 mx-auto">
-        <button class="w-full bg-stone-50 text-indigo-700 rounded px-4 py-2">Solicita una cotización</button>
+        <a href="#formulario-cita" class="block mx-auto bg-stone-50 text-blue-700 text-center rounded px-6 py-3">Solicitar cotización</a>
     </div>
 </section>
 <section class="relative z-0 space-y-6 py-12">
@@ -348,13 +348,56 @@
         <div class="absolute flex gap-2 bottom-2 left-1/2 -translate-x-1/2 h-2" id="slider-dots-container"></div>
     </div>
 </section>
-<section class="relative z-0 p-10 space-y-6">
-    <h1 class="text-center text-3xl text-indigo-900 font-extrabold uppercase">Seguridad para tu inversión</h1>
-    <p class="">
-        A ti que buscas no solo un residencial para vivir sino una inversión segura,
-        Residencial Imperio es tu opción más rentable del mercado por su valor costo/beneficio.
-        Gracias a la gran ubicación con la que cuenta, con una conectividad inigualable,
-        fluidez vial, zona segura y una serie de amenidades de lujo a las que no puedes resistirte.
-    </p>
+<section class="relative px-4 pt-8 pb-24 z-0 space-y-8">
+    <div class="absolute inset-0 -z-10">
+        <img class="absolute h-full w-auto object-center object-cover z-0" src="/static/demo-reel.jpg" alt="Fondo oficinas">
+        <div class="absolute inset-0 bg-stone-900 bg-opacity-60"></div>
+    </div>
+    <h1 class="text-center text-3xl text-stone-50 font-extrabold uppercase">Oficinas</h1>
+    <div class="bg-indigo-900 rounded space-y-4 p-4 text-stone-50 md:max-w-lg md:mx-auto">
+        <div class="flex items-center gap-6 pl-6 pr-4">
+            <div class="">
+                <svg class="w-6 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 46">
+                    <path id="location-svg-path" d="M24,47S6,37.583,6,19a18,18,0,0,1,36,0C42,37.583,24,47,24,47ZM24,3A16.019,16.019,0,0,0,8,19C8,33.758,20.462,42.5,24,44.687,27.547,42.51,40,33.805,40,19A16.019,16.019,0,0,0,24,3Zm0,25a9,9,0,1,1,9-9A9,9,0,0,1,24,28Zm0-16a7,7,0,1,0,7,7A7,7,0,0,0,24,12Z" transform="translate(-6 -1)" fill="#fff" fill-rule="evenodd"> </path>
+                </svg>
+            </div>
+            <p class="">
+                Gral. Anaya 101, Juan de la Barrera, 34150 Durango, Dgo.
+            </p>
+        </div>
+        <div class="flex items-center gap-6 pl-6 pr-4">
+            <div class="">
+                <svg class="w-6 h-auto" xmlns="http://www.w3.org/2000/svg" id="svg-telephone" data-name="svg-telephone" viewBox="0 0 44 44">
+                    <path id="tel-path" d="M60.1,62.3h0A26.133,26.133,0,0,1,34,36.2a9.947,9.947,0,0,1,8.663-9.844,2.554,2.554,0,0,1,2.686,1.552l3.69,8.611a2.567,2.567,0,0,1-.2,2.408l-3.077,4.68a.367.367,0,0,0-.019.352A14.317,14.317,0,0,0,52.4,50.592c.225.032.3.011.357-.03l4.6-3.073a2.583,2.583,0,0,1,2.452-.222l8.6,3.692a2.557,2.557,0,0,1,1.541,2.68A9.948,9.948,0,0,1,60.1,62.3ZM42.991,28.541A7.743,7.743,0,0,0,36.206,36.2,23.924,23.924,0,0,0,60.1,60.1a7.738,7.738,0,0,0,7.656-6.739.35.35,0,0,0-.212-.367l-8.614-3.7c-.217-.032-.285-.011-.343.028l-4.6,3.074a2.56,2.56,0,0,1-1.436.438h0a2.59,2.59,0,0,1-1.1-.248,16.54,16.54,0,0,1-7.69-7.667A2.592,2.592,0,0,1,43.92,42.4l3.074-4.676a.362.362,0,0,0,.02-.333l-3.7-8.626A.352.352,0,0,0,42.991,28.541Z" transform="translate(-29.314 -22.706)" fill="#fff"></path>
+                </svg>
+            </div>
+            <p class="">
+                6181941145
+            </p>
+        </div>
+        <div class="flex items-center gap-6 pl-6 pr-4">
+            <div class="">
+                <svg class="w-6 h-6 fill-current">
+                    <use href="/static/svg/envelope.svg#envelope"></use>
+                </svg>
+            </div>
+            <p class="">
+                sibradgo_bienes@hotmail.com
+            </p>
+        </div>
+        <div class="flex items-center gap-6 pl-6 pr-4">
+            <div class="">
+                <svg class="w-6 h-6 fill-current">
+                    <use href="/static/svg/clock.svg#clock"></use>
+                </svg>
+            </div>
+            <p class="flex flex-col">
+                Horario de 9am a 2pm y de 4pm a 7pm.
+            </p>
+        </div>
+        <div class="space-y-2 px-4">
+            <a href="#formulario-contacto" class="block mx-auto bg-stone-50 text-blue-700 text-center rounded px-6 py-3">Contactanos</a>
+        </div>
+    </div>
 </section>
 {{end}}

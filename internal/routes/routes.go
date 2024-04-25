@@ -10,6 +10,7 @@ func NewRouter() http.Handler {
 	router := http.NewServeMux()
 
 	router.HandleFunc("GET /{$}", RenderIndex)
+	router.HandleFunc("GET /promocion", RenderAdForm)
 
 	// Serve static
 	// *Might change it to serve static files through nginx
@@ -42,6 +43,28 @@ func RenderIndex(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 		respondWithError(w, 500, ErrorParams{})
+	}
+}
+
+func RenderAdForm(w http.ResponseWriter, r *http.Request) {
+	templ, err := template.ParseFiles(
+		"web/templates/layout.html",
+		"web/templates/ad-form/ad-form.html",
+		"web/templates/appointment-form.html",
+	)
+
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		respondWithError(w, http.StatusInternalServerError, ErrorParams{})
+		return
+	}
+
+	err = templ.Execute(w, nil)
+
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		respondWithError(w, http.StatusInternalServerError, ErrorParams{})
+		return
 	}
 }
 

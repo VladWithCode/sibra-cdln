@@ -97,13 +97,14 @@
             let m = numberTo2DigitString(date.getMonth() + 1)
             let d = numberTo2DigitString(date.getDate() + 1)
             let dateStr = `${y}-${m}-${d}T09:00:00`
-            let tl = gsap.timeline({ duration: 0.5 })
+            let tl = gsap.timeline({ duration: 0.4, delay: 0 })
 
             dateDisplay.textContent = dateFormat.format(new Date(dateStr))
             dateInp.value = dateStr
+            let finalHeight = formHeight + 32 // 32px = 2rem
 
             if (!isOpen) {
-                tl.to(appointmentForm, { height: `calc(${formHeight}px + 2rem)`})
+                tl.to(appointmentForm, { height: `${finalHeight}px`, ease: "power3.out" })
                 tl.to(appointmentToggler, { rotate: "-180deg" }, "<")
 
                 if (currentStep === 0) {
@@ -219,7 +220,7 @@
         return String(n)
     }
 </script>
-<div class="bg-stone-900 text-indigo-50 py-4 rounded-b-lg overflow-hidden">
+<div class="bg-stone-900 text-indigo-50 py-4 rounded-b-lg overflow-hidden" id="formulario-cita">
     <div class="flex px-4">
         <div class="space-y-4">
             <h1 class="text-3xl">Agendar Cita</h1>
@@ -243,14 +244,13 @@
 {{define "appointment-inputs"}}
 <input type="hidden" name="date" id="date" data-appointment-date="">
 <div id="appointment-form-datepicker" class="relative col-start-1 row-start-1 p-4 pb-0 opacity-0 translate-x-full space-y-4 self-start" data-appointment-step="0">
-    <div class="flex w-full text-lg font-medium justify-end items-center">
-        <p class="ml-auto">Fecha de la cita</p>
-    </div>
-    <div class="space-y-1 text-stone-400">
-        <p class="font-medium">Fecha</p>
-        <p class="" id="appointment-date-display"></p>
+    <div class="flex w-full text-lg font-medium items-center">
+        <p class="text-sm">Elige una fecha para tu cita (opcional)</p>
     </div>
     <div class="mx-auto" id="appointment-datepicker"></div>
+    <div class="space-y-1 text-stone-400">
+        <p class="" id="appointment-date-display"></p>
+    </div>
     <button class="w-full bg-indigo-600 font-medium py-2 rounded uppercase" type="button" id="appointment-next-step">Continuar</button>
 </div>
 <div id="appointment-form-inputs" class="relative col-start-1 row-start-1 space-y-4 p-4 pb-0 opacity-0 translate-x-full self-start" data-appointment-step="1">
@@ -261,7 +261,7 @@
         </svg>
         <span class="inline-block text-xs">Volver</span>
     </button>
-    <span>Datos de contacto</span>
+    <span class="w-[32ch] font-medium text-sm ml-auto">Ingresa tu nombre y un numero telefonico para comunicarnos contigo</span>
     </p>
     <div class="space-y-2">
         <label for="name" class="text-xs uppercase">Nombre completo</label>
@@ -283,7 +283,7 @@
             </svg>
             <span class="inline-block text-xs">Volver</span>
         </button>
-        <span>Confirma tus datos</span>
+        <span class="w-[20ch] text-sm ml-auto">Confirma que los datos que enviaras sean correctos.</span>
     </p>
     <div class="space-y-1 text-stone-400">
         <p class="font-medium">Fecha</p>
